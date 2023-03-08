@@ -1,25 +1,26 @@
-# Use an outdated Ubuntu version
-FROM ubuntu:16.04
+FROM ubuntu:latest
 
-# Install an outdated version of Apache
-RUN apt-get update && \
-    apt-get install -y apache2=2.4.18-2ubuntu3.17 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install Apache and other necessary packages
+RUN apt-get update && apt-get install -y apache2
 
-# Copy website files into the container
-#COPY website /var/www/html/
+# Create a new user with a specific user ID and group ID
+RUN groupadd -g 1001 apache-group
+RUN useradd -u 1001 -g 1001 -s /bin/bash apache-user
 
-# Expose port 8080
+# Configure Apache to run on port 8080
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
+RUN sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8080>/' /etc/apache2/sites-enabled/000-default.conf
+
+# Set the owner of the Apache document root directory to the new user and group
+RUN chown -R apache-user:apache-group /var/www/html
+
+# Set the environment variables to run Apache as the new user
+ENV APACHE_RUN_USER=apache-user
+ENV APACHE_RUN_GROUP=apache-group
+
+# Expose port 8080 for HTTP traffic
 EXPOSE 8080
 
-# Reset permissions of filesystem to default values
-RUN /usr/libexec/httpd-prepare && rpm-file-permissions
-
-
-
-USER 1001
-
-# Start Apache web server when the container is launched
-CMD ["/usr/bin/run-httpd"]
+# Start Apache in the foreground
+CMD ["apache2ctl", "-D", "FOREGROUND"]
 
