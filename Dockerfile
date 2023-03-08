@@ -23,6 +23,8 @@ RUN chown -R apache-user:apache-group /var/run/apache2
 
 
 RUN chgrp -R 0 /var/log && chmod -R g=u /var/log
+RUN chgrp -R 0 /var/run/apache2 && chmod -R g=u /var/run/apache2
+RUN chgrp -R 0 /var/run/apache2 && chmod -R g=u /var/run/apache2
 
 
 # Set the environment variables to run Apache as the new user
@@ -35,5 +37,5 @@ EXPOSE 8080
 USER 1001
 
 # Start Apache in the foreground
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+CMD ["apache2ctl","-D","FOREGROUND"]
 
