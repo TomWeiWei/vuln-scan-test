@@ -13,7 +13,13 @@ RUN apt-get update && \
 # Expose port 8080
 EXPOSE 8080
 
+# Reset permissions of filesystem to default values
+RUN /usr/libexec/httpd-prepare && rpm-file-permissions
+
+
+
 USER 1001
 
 # Start Apache web server when the container is launched
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+CMD ["/usr/bin/run-httpd"]
+
