@@ -28,7 +28,7 @@ ENV APACHE_RUN_GROUP=apache-group
 # Expose port 8080 for HTTP traffic
 EXPOSE 8080
 
-USER apache-user
+USER 1001
 
 # Start Apache in the foreground
 CMD ["apache2ctl", "-D", "FOREGROUND"]
