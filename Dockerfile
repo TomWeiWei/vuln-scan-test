@@ -21,6 +21,10 @@ RUN chown -R apache-user:apache-group /run/lock
 RUN mkdir /var/run/apache2
 RUN chown -R apache-user:apache-group /var/run/apache2
 
+
+RUN chgrp -R 0 /var/log && chmod -R g=u /var/log
+
+
 # Set the environment variables to run Apache as the new user
 ENV APACHE_RUN_USER=apache-user
 ENV APACHE_RUN_GROUP=apache-group
