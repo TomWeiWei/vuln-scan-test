@@ -10,8 +10,10 @@ RUN apt-get update && \
 # Copy website files into the container
 #COPY website /var/www/html/
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
+
+USER 1001
 
 # Start Apache web server when the container is launched
 CMD ["apache2ctl", "-D", "FOREGROUND"]
